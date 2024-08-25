@@ -23,7 +23,6 @@ void readFromFile(char* address){
     while(fgets(fileContent, sizeof(fileContent), fptr)) {
         printf("%s", fileContent);
     }
-    printf("\n"); //print new line for clarity
 }
 
 /**
@@ -36,18 +35,21 @@ void readFromSTD(){
     while(fgets(buffer, sizeof(buffer), stdin) != NULL){
         printf("%s", buffer);
     }
-    printf("\n"); //print new line for clarity
 }
 
 
 int main(int argc, char *argv[]){
     
     if(strcmp(argv[1], "-")!=0 && argc > 1){
-       
-       readFromFile(argv[1]);
+        //go thorugh all files for concatenation
+        for(int i = 1; i < argc; i++)
+            readFromFile(argv[i]);
 
     }else{
         readFromSTD();
     }
+
+    
+    printf("\n");
     return 0; 
 }
