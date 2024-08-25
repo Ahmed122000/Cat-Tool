@@ -3,21 +3,41 @@
 #include<unistd.h>
 
 
-int main(int argc, char *argv[]){
-    FILE* fptr = fopen(argv[1], "r");
-    
+void readFromFile(char* address){
+    FILE *fptr; //file pointer 
+    char fileContent[1024];
+    fptr = fopen(address, "r");
     if(fptr == NULL){
         printf("Sorry, file not found\n");
         printf("we will exit\n");
-        return -1; 
+        return; 
     }
 
-    char fileContent[100];
-
-    // Read the content and print it
     while(fgets(fileContent, 100, fptr)) {
         printf("%s", fileContent);
     }
+    printf("\n");
 
+    
+}
+
+
+void readFromSTD(){
+    char buffer[1024];
+    while(fgets(buffer, sizeof(buffer), stdin) != NULL){
+        printf("%s", buffer);
+    }
+    printf("\n");
+}
+
+int main(int argc, char *argv[]){
+    
+    if(strcmp(argv[1], "-")!=0 && argc >1){
+       
+       readFromFile(argv[1]);
+
+    }else{
+        readFromSTD();
+    }
     return 0; 
 }
