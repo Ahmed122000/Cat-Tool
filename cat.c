@@ -2,14 +2,30 @@
 #include<string.h>
 #include<unistd.h>
 
+
+int line =1; 
+void printWithLineNumber(FILE* fptr){
+    char content[1024];
+
+    while(fgets(content, sizeof(content), fptr)) {
+        printf("%d %s", line++, content);
+    }
+}
+
+void printWithoutLineNumber(FILE* fptr){
+    char content[1024];
+    while(fgets(content, sizeof(content), fptr)) {
+        printf("%s", content);
+    }
+}
+
 /**
  * @brief first feature of the tool: read the input form file, then print it on the screen 
  * 
  * @param address the path (relative path), to read the file
  */
-void readFromFile(char* address){
+void readFromFile(char* address, char printLines){
     FILE *fptr;
-    char fileContent[1024];
     fptr = fopen(address, "r");
     
     //return an error message and exit the tool in case of wrong path
@@ -20,8 +36,11 @@ void readFromFile(char* address){
     }
 
     //read the input from the file and print it
-    while(fgets(fileContent, sizeof(fileContent), fptr)) {
-        printf("%s", fileContent);
+    if(printLines == 'y'){
+        printWithLineNumber(fptr);
+    }
+    else{
+        printWithoutLineNumber(fptr);
     }
 }
 
@@ -29,27 +48,38 @@ void readFromFile(char* address){
  * @brief second feature of the tool: read the input form standard input, then print it on the screen
  * 
  */
-void readFromSTD(){
+void readFromSTD(char printLines){
     char buffer[1024];
     //while there is input read it then print it 
-    while(fgets(buffer, sizeof(buffer), stdin) != NULL){
-        printf("%s", buffer);
+    if(printLines == 'y'){
+        printWithLineNumber(stdin);
+    }
+    else{
+        printWithoutLineNumber(stdin);
     }
 }
 
 
 int main(int argc, char *argv[]){
-    
+    char lineNumber = 'n';
+    for(int i =0; i < argc; i++){
+        if(strcmp(argv[i], "-n") ==0){
+            lineNumber = 'y';
+            argc-=1; 
+        }
+    }
+
+
     if(strcmp(argv[1], "-")!=0 && argc > 1){
         //go thorugh all files for concatenation
         for(int i = 1; i < argc; i++)
-            readFromFile(argv[i]);
+            readFromFile(argv[i], lineNumber);
 
     }else{
-        readFromSTD();
+        readFromSTD(lineNumber);
     }
 
-    
+
     printf("\n");
     return 0; 
 }
