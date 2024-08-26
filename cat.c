@@ -5,6 +5,11 @@
 
 int line =1;
 
+/**
+ * @brief function to handle printing the line number excluding the blanks
+ * 
+ * @param fptr a pionter for the input source
+ */
 void printWithLinesNoBlank(FILE* fptr){
     char content[1024]; 
     while(fgets(content, sizeof(content), fptr)) {
